@@ -5,11 +5,13 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AppServer extends Thread{
     final static int port = 19337;
     private Socket socket;
-
+    List<Socket>alloutputs = new ArrayList<Socket>();
 
     public AppServer appServerConnexion (){
  try {
@@ -19,6 +21,8 @@ public class AppServer extends Thread{
                 Socket socketClient = socketServeur.accept();
                 AppServer t = new AppServer(socketClient);
                 t.start();
+                alloutputs.add(socketClient);
+                System.out.println("alloutputs"+ alloutputs);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -59,11 +63,20 @@ return null;
 
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             System.out.println("inServer: " + in);
+            // PrintStream out;
+          
+            // for(int i=0; i<alloutputs.size();i++){
+            //      out = new PrintStream(alloutputs.get(i).getOutputStream()); 
+            //      System.out.println("outServer: " + out);
+            // }
+        
             PrintStream out = new PrintStream(socket.getOutputStream());
             System.out.println("outServer: " + out);
-            // message = in.readLine();
-            // out.println("Bonjour " + message + "\n");
-            // System.out.println("message: " + message);
+
+            message = in.readLine();
+            out.println("Bonjour " + message + "\n");
+            System.out.println("message: " + message);
+           
             while(!message.contains("disconnect")){
                 message = in.readLine();
                 out.println("Bonjour " + message + "\n");
