@@ -10,8 +10,9 @@ public class AppServer extends Thread{
     final static int port = 19337;
     private Socket socket;
 
-    public static void main(String[] args) {
-        try {
+
+    public AppServer appServerConnexion (){
+ try {
             ServerSocket socketServeur = new ServerSocket(port);
             System.out.println("Lancement du serveur");
             while (true) {
@@ -23,6 +24,22 @@ public class AppServer extends Thread{
             e.printStackTrace();
             
         }
+return null;
+
+    }
+    public static void main(String[] args) {
+        // try {
+        //     ServerSocket socketServeur = new ServerSocket(port);
+        //     System.out.println("Lancement du serveur");
+        //     while (true) {
+        //         Socket socketClient = socketServeur.accept();
+        //         AppServer t = new AppServer(socketClient);
+        //         t.start();
+        //     }
+        // } catch (Exception e) {
+        //     e.printStackTrace();
+            
+        // }
         
     }
 
@@ -44,10 +61,18 @@ public class AppServer extends Thread{
             System.out.println("inServer: " + in);
             PrintStream out = new PrintStream(socket.getOutputStream());
             System.out.println("outServer: " + out);
-            message = in.readLine();
-            out.println("Bonjour " + message + "\n");
-
+            // message = in.readLine();
+            // out.println("Bonjour " + message + "\n");
+            // System.out.println("message: " + message);
+            while(!message.contains("disconnect")){
+                message = in.readLine();
+                out.println("Bonjour " + message + "\n");
+                System.out.println("message: " + message);
+            }
+            in.close();
+            out.close();
             socket.close();
+          
         } catch (Exception e) {
             e.printStackTrace();
         }
