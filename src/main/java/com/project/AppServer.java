@@ -71,9 +71,22 @@ return null;
             // }
         
             PrintStream out = new PrintStream(socket.getOutputStream());
+           
             System.out.println("outServer: " + out);
 
             message = in.readLine();
+            // for(Socket client:alloutputs){
+            //     PrintStream clientMessage = new PrintStream(client.getOutputStream());
+            //     clientMessage.println("message dans la boucle" + message);
+            //     System.out.println("message dans la boucle: " + message);
+                
+            // }
+            // for (int i = 0; i < alloutputs.size(); i++) {
+            //     out = new PrintStream(alloutputs.get(i).getOutputStream());
+            //     System.out.println("outServer dans la boucle: " + out);
+            //     out.println("Bonjour " + message + "\n");
+            //     System.out.println("message: " + message);
+            // }
             out.println("Bonjour " + message + "\n");
             System.out.println("message: " + message);
            
