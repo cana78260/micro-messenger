@@ -20,8 +20,8 @@ public class AppServer extends Thread{
             while (true) {
                 Socket socketClient = socketServeur.accept();
                 AppServer t = new AppServer(socketClient);
-                t.start();
-                alloutputs.add(socketClient);
+                t.start();// a corriger
+                this.alloutputs.add(socketClient);
                 System.out.println("alloutputs"+ alloutputs);
             }
         } catch (Exception e) {
@@ -75,10 +75,10 @@ return null;
             System.out.println("outServer: " + out);
 
             message = in.readLine();
-            // for(Socket client:alloutputs){
-            //     PrintStream clientMessage = new PrintStream(client.getOutputStream());
-            //     clientMessage.println("message dans la boucle" + message);
-            //     System.out.println("message dans la boucle: " + message);
+            for(Socket client:alloutputs){
+                PrintStream clientMessage = new PrintStream(client.getOutputStream());
+                clientMessage.println("message dans la boucle" + message);
+                System.out.println("message dans la boucle: " + message);
                 
             // }
             // for (int i = 0; i < alloutputs.size(); i++) {
