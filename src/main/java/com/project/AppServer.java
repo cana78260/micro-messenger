@@ -95,12 +95,14 @@ return null;
                 out.println("Bonjour " + message + "\n");
                 System.out.println("message: " + message);
             }
+        }
             in.close();
             out.close();
-            socket.close();
+            socket.close();}
           
-        } catch (Exception e) {
+         catch (Exception e) {
             e.printStackTrace();
         }
     }
 }
+
