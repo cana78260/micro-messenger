@@ -1,29 +1,68 @@
 package com.project;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.time.LocalDateTime;
 import java.util.Scanner;
+
+
+
 
 public class AppClient {
 
-    int port;
+    public class ServerListener implements Runnable {
+        private Socket socket;
 
+        public ServerListener(Socket socket){
+                this.socket = socket;
+        }
 
-    public AppClient(){
-        this.port = port;
+        public void run(){
+            try{
+                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                String message;
+
+                while((message = in.readLine()) != null){
+                    System.out.println("message reçu: " + message);
+                }
+                in.close();
+                socket.close();
+            }catch (IOException error){
+                    error.printStackTrace();
+            }
+        }
     }
 
-    public AppClient connexionClient(String host, int port) throws Exception{
+    String hostname;
+    // String port;
+    int port;
+   
+
+
+    public AppClient(
+   String hostname,
+   
+    int port
+    ){
+       
+      this.hostname = hostname;
+      this.port = port;
+       
+    }
+
+    public AppClient connexionClient() throws Exception{
         
-       InetAddress adrLocale = InetAddress.getByName(host);
-         host= adrLocale.getHostName();
+       InetAddress adrLocale = InetAddress.getByName(hostname);
+         hostname= adrLocale.getHostName();
         System.out.println("Adresse locale = " + adrLocale);
         
    
-         port = 19337;
+        //  port = "19337";
+        //  int portParsed = Integer.parseInt(port);
         String cmd;
         String line = "";
         // AppClient clientTest = new AppClient(19337);
@@ -31,7 +70,7 @@ public class AppClient {
         java.util.Scanner inputPseudo = new Scanner(System.in);
         String pseudo = inputPseudo.next();
 
-        Socket socket = new Socket(host, port);
+        Socket socket = new Socket(hostname, port);
         
         System.out.println("socket" + socket);
         BufferedReader input = new BufferedReader(
@@ -39,14 +78,25 @@ public class AppClient {
         PrintStream output = new PrintStream(socket.getOutputStream(), true);
         System.out.println("inputClient: " + input);
         System.out.println("outputClient: " + output);
+
+
+       
+
+       
         while (true) {
             Scanner scan = new Scanner(System.in);
            
-            System.out.println(host+ ":" + port + "#>");
+            System.out.println(hostname+ ":" + port + "#>");
           
             while(!line.contains("disconnect")){
+                LocalDateTime now = LocalDateTime.now();
+                int hour = now.getHour();
+                int sec = now.getSecond();
                 cmd = scan.nextLine(); // Scanning command to send to the server
-                output.println("commande de "+ pseudo +": " + cmd + "\n");
+                output.println(hour + ":" + sec + pseudo + ": " + cmd + "\n");
+                // output.println("commande de "+ pseudo +": " + cmd + "\n");
+                Thread displayMessages = new Thread(new ServerListener(socket));
+                displayMessages.start();
                 line = input.readLine();
                 // System.out.println("line: " + line);
             }
