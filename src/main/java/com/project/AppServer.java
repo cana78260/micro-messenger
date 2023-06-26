@@ -103,6 +103,7 @@ public class AppServer implements Runnable{
             //     out.println("Bonjour " + message + "\n");
             //     System.out.println("message: " + message);
             // }
+            //fre
             out.println("Bonjour " + "\n");
             // message = in.readLine();
             System.out.println("message avant la boucle: " + message);
