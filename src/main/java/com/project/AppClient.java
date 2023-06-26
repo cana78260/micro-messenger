@@ -34,11 +34,12 @@ public class AppClient {
             }catch (IOException error){
                     error.printStackTrace();
             }
+            
         }
     }
 
     String hostname;
-    // String port;
+   
     int port;
    
 
@@ -54,18 +55,16 @@ public class AppClient {
        
     }
 
-    public AppClient connexionClient() throws Exception{
+    public void connexionClient() throws Exception{
         
        InetAddress adrLocale = InetAddress.getByName(hostname);
          hostname= adrLocale.getHostName();
         System.out.println("Adresse locale = " + adrLocale);
         
    
-        //  port = "19337";
-        //  int portParsed = Integer.parseInt(port);
         String cmd;
         String line = "";
-        // AppClient clientTest = new AppClient(19337);
+      
         System.out.println("quel est ton pseudo?: ");
         java.util.Scanner inputPseudo = new Scanner(System.in);
         String pseudo = inputPseudo.next();
@@ -79,31 +78,34 @@ public class AppClient {
         System.out.println("inputClient: " + input);
         System.out.println("outputClient: " + output);
 
-
+        Thread displayMessages = new Thread(new ServerListener(socket));
+        System.out.println("displayMessages" + displayMessages);
+        displayMessages.start();
        
-
-       
-        while (true) {
             Scanner scan = new Scanner(System.in);
            
             System.out.println(hostname+ ":" + port + "#>");
           
-            while(!line.contains("disconnect")){
-                LocalDateTime now = LocalDateTime.now();
-                int hour = now.getHour();
-                int sec = now.getSecond();
+            while(true){
+                // LocalDateTime now = LocalDateTime.now();
+                // int hour = now.getHour();
+                // int sec = now.getSecond();
                 cmd = scan.nextLine(); // Scanning command to send to the server
-                output.println(hour + ":" + sec + pseudo + ": " + cmd + "\n");
-                // output.println("commande de "+ pseudo +": " + cmd + "\n");
-                Thread displayMessages = new Thread(new ServerListener(socket));
-                displayMessages.start();
+                // output.println(hour + ":" + sec + pseudo + ": " + cmd + "\n");
+                output.println("commande de "+ pseudo +": " + cmd + "\n");
+              
                 line = input.readLine();
                 // System.out.println("line: " + line);
+
+                if(cmd.equals("disconnect")){
+                    break;
+                }
+
             }
             input.close();
             output.close();
             socket.close();
-        }
+     
         
     }
 
