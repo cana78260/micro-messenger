@@ -6,7 +6,10 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Scanner;
 
 
@@ -16,7 +19,8 @@ public class AppClient {
 
     public class ServerListener implements Runnable {
         private Socket socket;
-
+       
+       
         public ServerListener(Socket socket){
                 this.socket = socket;
         }
@@ -67,7 +71,7 @@ public class AppClient {
       
         System.out.println("quel est ton pseudo?: ");
         java.util.Scanner inputPseudo = new Scanner(System.in);
-        String pseudo = inputPseudo.next();
+        String pseudo  = inputPseudo.next();
 
         Socket socket = new Socket(hostname, port);
         
@@ -87,12 +91,15 @@ public class AppClient {
             System.out.println(hostname+ ":" + port + "#>");
           
             while(true){
-                // LocalDateTime now = LocalDateTime.now();
-                // int hour = now.getHour();
-                // int sec = now.getSecond();
+                LocalDateTime now = LocalDateTime.now();
+                int hour = now.getHour();
+                int sec = now.getSecond();
+                // DateFormat dateFormat = new SimpleDateFormat("HH.ss a");
+                // String ResultFormat = dateFormat(new Date());
                 cmd = scan.nextLine(); // Scanning command to send to the server
-                // output.println(hour + ":" + sec + pseudo + ": " + cmd + "\n");
-                output.println("commande de "+ pseudo +": " + cmd + "\n");
+                // output.println(dateFormat + pseudo + " : " + cmd + "\n");
+                output.println(hour + ":" + sec + pseudo + ": " + cmd + "\n");
+                // output.println("commande de "+ pseudo +": " + cmd + "\n");
               
                 line = input.readLine();
                 // System.out.println("line: " + line);
