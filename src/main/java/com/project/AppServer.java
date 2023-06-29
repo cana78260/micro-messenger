@@ -10,15 +10,16 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AppServer implements Runnable{
+public class AppServer {
     private int port;
-    private Socket socket;
-    private static List<Socket>alloutputs = new ArrayList<Socket>();
-    private static String message;
+    // private Socket socket;
+    private List<Socket>alloutputs ;
+    // private  String message;
     
     public AppServer(Socket socket, int port) {
-        this.socket = socket;
+        // this.socket = socket;
         this.port = port;
+        alloutputs = new ArrayList<Socket>();
     
     }
 
@@ -34,7 +35,7 @@ public class AppServer implements Runnable{
                alloutputs.add(socketClient);
                 System.out.println("alloutputs"+ alloutputs);
 
-                Thread clientThread = new Thread(new AppServer(socketClient, port));
+                Thread clientThread = new Thread(new ClientHandler(socketClient,alloutputs));
                 System.out.println("clientThread: " + clientThread);
                 clientThread.start(); 
             }
@@ -48,73 +49,73 @@ public class AppServer implements Runnable{
  
     
     
-    private String sendMessagesToAll(String message) throws IOException {
-System.out.println("alloutputs dans methode" +alloutputs.size());
-        for (Socket client :alloutputs) {
+//     private String sendMessagesToAll(String message) throws IOException {
+// System.out.println("alloutputs dans methode" +alloutputs.size());
+//         for (Socket client :alloutputs) {
       
-            try {
+//             try {
 
-                if(client != socket){
+//                 if(client != socket){
        
-                OutputStream outputStream = client.getOutputStream();
+//                 OutputStream outputStream = client.getOutputStream();
               
-                PrintStream printStream = new PrintStream(outputStream);
+//                 PrintStream printStream = new PrintStream(outputStream);
              
-                printStream.println(message);
+//                 printStream.println(message);
        
-                printStream.flush();}
+//                 printStream.flush();}
               
                
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return message;
-    }
+//             } catch (IOException e) {
+//                 e.printStackTrace();
+//             }
+//         }
+//         return message;
+//     }
 
-    public void run() {
-        try {
-              message = "";
+    // public void run() {
+    //     try {
+    //           message = "";
 
-            System.out.println("Connexion avec le client : " + socket.getInetAddress());
+    //         System.out.println("Connexion avec le client : " + socket.getInetAddress());
 
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+    //         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
       
           
         
-            PrintStream out = new PrintStream(socket.getOutputStream());
+    //         PrintStream out = new PrintStream(socket.getOutputStream());
            
        
 
           
-            out.println("Bienvenue à toi  " + "\n");
+    //         out.println("Bienvenue à toi  " + "\n");
          
-            System.out.println("message avant la boucle: " + message);
+    //         System.out.println("message avant la boucle: " + message);
                       
-            while(!message.equals("disconnect") ){
+    //         while(!message.equals("disconnect") ){
               
             
-              message=in.readLine();
+    //           message=in.readLine();
                
                
-                sendMessagesToAll("message to All: " + message);
-                 out.println( message + "\n");
-                System.out.println("valeur du message dans run(): " + message);
+    //             sendMessagesToAll("message to All: " + message);
+    //              out.println( message + "\n");
+    //             System.out.println("valeur du message dans run(): " + message);
              
                 
               
-            }
+    //         }
        
-            in.close();
-            out.close();
-            socket.close();}
+    //         in.close();
+    //         out.close();
+    //         socket.close();}
           
-         catch (Exception e) {
-            e.printStackTrace();
-        }
+    //      catch (Exception e) {
+    //         e.printStackTrace();
+    //     }
 
    
-    }
+    // }
 
 }
 

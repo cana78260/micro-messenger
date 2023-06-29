@@ -19,9 +19,10 @@ public class AppClient {
 
     public class ServerListener implements Runnable {
         private Socket socket;
-       
+     
        
         public ServerListener(Socket socket){
+            
                 this.socket = socket;
         }
 
@@ -29,7 +30,7 @@ public class AppClient {
             try{
                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 String message;
-
+                  
                 while((message = in.readLine()) != null){
                     System.out.println("message reçu: " + message);
                 }
